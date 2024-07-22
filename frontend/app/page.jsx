@@ -5,9 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './page.module.css';
 import BlockTime from './components/BlockTime';
+import SmartContractInteractions from './components/SmartContractInteractions';
+import AccountBalance from './components/AccountBalance';
 
 export default function Home() {
   const [error, setError] = useState(null);
+  const [contractAddress, setContractAddress] = useState('SP1234567890abcdef1234567890abcdef12345678');
+  const [accountAddress, setAccountAddress] = useState('SP9876543210abcdef1234567890abcdef12345678');
 
   const hexToString = (hex) => {
     if (typeof hex !== 'string' || !hex.startsWith('0x')) return hex;
@@ -51,6 +55,14 @@ export default function Home() {
       </div>
 
       <BlockTime />
+
+      <div className={styles.contractInteractions}>
+        <SmartContractInteractions contractAddress={contractAddress} />
+      </div>
+
+      <div className={styles.accountBalance}>
+        <AccountBalance accountAddress={accountAddress} />
+      </div>
     </div>
   );
 }

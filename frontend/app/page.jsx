@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './page.module.css';
-
+import BlockTime from './components/BlockTime';
 
 export default function Home() {
   const [error, setError] = useState(null);
@@ -50,6 +49,8 @@ export default function Home() {
           </Link>
         </div>
       </div>
+
+      <BlockTime />
     </div>
   );
 }

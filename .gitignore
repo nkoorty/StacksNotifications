@@ -1,6 +1,0 @@
-local-devnet
-node_modules
-.env
-.env.local
-.yarn
-.next

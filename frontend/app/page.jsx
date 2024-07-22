@@ -23,7 +23,6 @@ export default function Home() {
   };
 
   if (error) return <div>Error: {error}</div>;
-  if (!api) return <div>Loading...</div>;
 
   return (
     <div className={styles.container}>

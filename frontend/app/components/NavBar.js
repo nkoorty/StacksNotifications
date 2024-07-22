@@ -24,8 +24,7 @@ const NavBar = () => {
     return (
         <nav className={`${styles.navbar} ${isSolid ? styles.solid : styles.solid}`}>
             <div className={styles.logo}>
-                <img src="paperbaum_t.png" alt="Paperbaum Logo" className={styles.img} />
-                <Link href="/">Paperbaum</Link>
+                <Link href="/">StacksNotifications</Link>
             </div>
             <ul className={styles.navLinks}>
                 <li><Link href="/upload">Upload</Link></li>

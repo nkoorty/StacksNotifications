@@ -17,5 +17,3 @@ The frontend, built with Next.js, provides an intuitive interface for developers
 
 ## Getting Started
 To get started with StacksNotifications on Stacks, clone the repository, install dependencies, set up environment variables, deploy your Clarity smart contracts on the Stacks blockchain, and run the application. Access the dashboard via your browser to manage your notifications.
-
-test

@@ -42,6 +42,9 @@ export default function Home() {
           <div className={styles.heroText}>
             <h1>StacksNotifications</h1>
             <p>Get notified when someone interacts with your smart contract</p>
+            <Link href="/notificationSettings" className={styles.settingsLink}>
+              Manage Notifications
+            </Link>
           </div>
         </div>
       </div>

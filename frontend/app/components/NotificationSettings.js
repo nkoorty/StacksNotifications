@@ -1,47 +1,102 @@
-import React, { useState } from 'react';
-import styles from './notificationsettings.module.css';
+import { useState } from 'react';
+import { Tooltip } from 'react-tooltip';
+import PreviewModal from './PreviewModal';
 
-const NotificationSettings = () => {
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [smsNotifications, setSmsNotifications] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+const NotificationSettings = ({ onSave }) => {
+  const [email, setEmail] = useState('');
+  const [frequency, setFrequency] = useState('daily');
+  const [eventType, setEventType] = useState('all');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
 
-  const handleEmailChange = () => setEmailNotifications(!emailNotifications);
-  const handleSmsChange = () => setSmsNotifications(!smsNotifications);
+  const handleSave = async () => {
+    if (!email.includes('@')) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
+    const preferences = {
+      email,
+      frequency,
+      eventType,
+    };
 
-    setTimeout(() => {
-      setLoading(false);
-      setMessage('Notification settings updated successfully.');
-    }, 1000);
+    try {
+      await onSave(preferences);
+      setSuccessMessage('Preferences saved successfully.');
+      setErrorMessage('');
+    } catch (error) {
+      setErrorMessage('Failed to save preferences. Please try again.');
+      setSuccessMessage('');
+    }
+  };
+
+  const handlePreview = () => {
+    if (!email.includes('@')) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+
+    setShowPreview(true);
   };
 
   return (
-    <div className={styles.settingsContainer}>
+    <div className="notification-settings">
       <h2>Notification Settings</h2>
-      <form onSubmit={handleSubmit}>
-        <div className={styles.settingItem}>
-          <label>
-            <input type="checkbox" checked={emailNotifications} onChange={handleEmailChange} />
-            Email Notifications
-          </label>
-        </div>
-        <div className={styles.settingItem}>
-          <label>
-            <input type="checkbox" checked={smsNotifications} onChange={handleSmsChange} />
-            SMS Notifications
-          </label>
-        </div>
-        <button type="submit" className={styles.submitButton} disabled={loading}>
-          {loading ? 'Saving...' : 'Save Settings'}
-        </button>
-        {message && <p className={styles.message}>{message}</p>}
-      </form>
+      <div className="form-group">
+        <label htmlFor="email">
+          Email Address
+          <Tooltip content="We'll send notifications to this email." placement="right" />
+        </label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="frequency">
+          Notification Frequency
+          <Tooltip content="How often you'd like to receive notifications." placement="right" />
+        </label>
+        <select
+          id="frequency"
+          value={frequency}
+          onChange={(e) => setFrequency(e.target.value)}
+        >
+          <option value="immediate">Immediate</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+        </select>
+      </div>
+      <div className="form-group">
+        <label htmlFor="event-type">
+          Event Type
+          <Tooltip content="Which types of events you'd like to be notified about." placement="right" />
+        </label>
+        <select
+          id="event-type"
+          value={eventType}
+          onChange={(e) => setEventType(e.target.value)}
+        >
+          <option value="all">All Events</option>
+          <option value="transaction">Transactions</option>
+          <option value="state-change">State Changes</option>
+          <option value="custom-trigger">Custom Triggers</option>
+        </select>
+      </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      <button onClick={handlePreview}>Preview Preferences</button>
+      <button onClick={handleSave}>Save Preferences</button>
+
+      <PreviewModal
+        preferences={{ email, frequency, eventType }}
+        onClose={() => setShowPreview(false)}
+      />
     </div>
   );
 };

@@ -6,21 +6,20 @@ export const saveUserPreferences = async (preferences) => {
 
   const { email, frequency, eventType } = preferences;
 
-  return await collection.updateOne(
-    { email: email },
-    {
-      $set: {
-        frequency: frequency,
-        eventType: eventType,
+  try {
+    await collection.updateOne(
+      { email: email },
+      {
+        $set: {
+          frequency: frequency,
+          eventType: eventType,
+        },
       },
-    },
-    { upsert: true }
-  );
-};
-
-export const getUserPreferences = async (email) => {
-  const db = await connectToDatabase();
-  const collection = db.collection('userPreferences');
-
-  return await collection.findOne({ email: email });
+      { upsert: true }
+    );
+    return true;
+  } catch (error) {
+    console.error('Error saving preferences:', error);
+    throw new Error('Database error');
+  }
 };

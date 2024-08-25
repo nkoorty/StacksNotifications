@@ -1,0 +1,36 @@
+.historical-events {
+    margin-top: 20px;
+  }
+  
+  .contract-input {
+    margin-bottom: 20px;
+  }
+  
+  .contract-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .contract-input input {
+    padding: 8px;
+    width: 100%;
+    font-size: 1rem;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  ul li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+  }
+  
+  ul li strong {
+    font-weight: bold;
+  }
+  

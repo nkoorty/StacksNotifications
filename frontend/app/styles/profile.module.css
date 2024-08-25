@@ -1,0 +1,31 @@
+.email-notification-preferences {
+    margin-bottom: 20px;
+  }
+  
+  .preference-field {
+    margin-bottom: 15px;
+  }
+  
+  .preference-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .preference-field input,
+  .preference-field select {
+    padding: 8px;
+    width: 100%;
+    font-size: 1rem;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

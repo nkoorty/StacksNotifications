@@ -1,29 +1,31 @@
-(define-data-var event-counter int 0)
-(define-data-var event-log (list 100 {id: int, event: (string-ascii 50), timestamp: uint}) [])
+(define-map events
+  ((contract-owner principal) (event-id uint))
+  ((event-type (string-ascii 32)) (timestamp uint) (sender principal)))
 
-(define-public (trigger-event (event-type (string-ascii 50)))
+(define-public (create-event (event-type (string-ascii 32)) (sender principal))
   (begin
-    (var-set event-counter (+ (var-get event-counter) 1))
-    (log-event (var-get event-counter) event-type)
-    (print { "event": event-type, "counter": (var-get event-counter) })
-    (ok (var-get event-counter))
+    (map-insert events
+      ((contract-owner tx-sender) (event-id (next-event-id)))
+      ((event-type event-type) (timestamp (block-height)) (sender sender)))
+    (ok "Event created successfully")
   )
 )
 
-(define-read-only (get-event-counter)
-  (ok (var-get event-counter))
+(define-read-only (get-events-by-type (event-type (string-ascii 32)))
+  (begin
+    (filter
+      (lambda (event)
+        (is-eq (get event-type (snd event)) event-type))
+      (map-values events))
+  )
 )
 
-(define-read-only (get-event-log)
-  (ok (var-get event-log))
-)
-
-(define-read-only (get-event-by-id (id int))
-  (let ((event (find-event id)))
-    (if (is-some event)
-      (ok (unwrap! event (err "Event not found")))
-      (err "Event not found")
-    )
+(define-read-only (get-events-by-sender (sender principal))
+  (begin
+    (filter
+      (lambda (event)
+        (is-eq (get sender (snd event)) sender))
+      (map-values events))
   )
 )
 
@@ -89,15 +91,12 @@
   )
 )
 
-(define-private (find-event (id int))
-  (let ((events (var-get event-log)))
-    (let ((filtered-events (filter (lambda (event)
-                                     (is-eq (get id event) id))
-                                   events)))
-      (if (is-eq (len filtered-events) 0)
-        (none)
-        (some (nth 0 filtered-events))
-      )
-    )
+(define-read-only (next-event-id)
+  (let ((current-id (var-get event-id-counter)))
+    (begin
+      (var-set event-id-counter (+ current-id u1))
+      current-id)
   )
 )
+
+(define-data-var event-id-counter uint u1)

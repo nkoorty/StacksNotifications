@@ -1,0 +1,24 @@
+name: Clarity Contract Tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install clarity-cli
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clarinet
+
+    - name: Run Clarity contract tests
+      run: clarinet test contracts/tests

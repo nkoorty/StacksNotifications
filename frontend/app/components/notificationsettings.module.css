@@ -36,6 +36,12 @@
   text-align: center;
 }
 
+.success-message {
+  color: green;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 button {
   display: block;
   width: 100%;

@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
+import PreviewModal from './PreviewModal';
 
 const NotificationSettings = ({ onSave }) => {
   const [email, setEmail] = useState('');
   const [frequency, setFrequency] = useState('daily');
   const [eventType, setEventType] = useState('all');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!email.includes('@')) {
       setErrorMessage('Please enter a valid email address.');
       return;
@@ -19,8 +22,23 @@ const NotificationSettings = ({ onSave }) => {
       eventType,
     };
 
-    onSave(preferences);
-    setErrorMessage('');
+    try {
+      await onSave(preferences);
+      setSuccessMessage('Preferences saved successfully.');
+      setErrorMessage('');
+    } catch (error) {
+      setErrorMessage('Failed to save preferences. Please try again.');
+      setSuccessMessage('');
+    }
+  };
+
+  const handlePreview = () => {
+    if (!email.includes('@')) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+
+    setShowPreview(true);
   };
 
   return (
@@ -71,7 +89,14 @@ const NotificationSettings = ({ onSave }) => {
         </select>
       </div>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      <button onClick={handlePreview}>Preview Preferences</button>
       <button onClick={handleSave}>Save Preferences</button>
+
+      <PreviewModal
+        preferences={{ email, frequency, eventType }}
+        onClose={() => setShowPreview(false)}
+      />
     </div>
   );
 };

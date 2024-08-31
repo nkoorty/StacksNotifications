@@ -1,0 +1,17 @@
+(define-public (test-register-alert)
+  (let ((result (contract-call? .AlertManager register-alert 'ST1W3G6AA2EZR12RS69SR9MHD3S82JTGMQ4Z8CZ0D 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6))
+       )
+    (ok result)
+  )
+)
+
+(define-public (test-trigger-alert)
+  (let ((result (contract-call? .AlertManager trigger-alert 'ST1W3G6AA2EZR12RS69SR9MHD3S82JTGMQ4Z8CZ0D))
+       )
+    (ok result)
+  )
+)
+
+(define-read-only (test-get-alert-recipients)
+  (ok (contract-call? .AlertManager get-alert-recipients 'ST1W3G6AA2EZR12RS69SR9MHD3S82JTGMQ4Z8CZ0D))
+)

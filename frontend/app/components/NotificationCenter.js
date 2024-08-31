@@ -5,15 +5,19 @@ import { formatDateTime } from '../lib/dateUtils';
 const NotificationCenter = () => {
     const [notifications, setNotifications] = useState([]);
     const [filter, setFilter] = useState('all');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchNotifications = async () => {
+            setLoading(true);
             const response = await apiRequest('/api/get-event-api');
             if (response.success) {
                 setNotifications(response.events);
             } else {
-                console.error('Failed to fetch notifications');
+                setError('Failed to fetch notifications. Please try again later.');
             }
+            setLoading(false);
         };
 
         fetchNotifications();
@@ -23,6 +27,14 @@ const NotificationCenter = () => {
         if (filter === 'all') return true;
         return notification.type === filter;
     });
+
+    if (loading) {
+        return <div>Loading notifications...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <div>

@@ -66,6 +66,8 @@ export default function Home() {
       <div className={styles.accountBalance}>
         <AccountBalance accountAddress={accountAddress} />
       </div>
+
+      <NotificationCenter />
     </div>
   );
 }
